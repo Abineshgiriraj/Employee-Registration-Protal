@@ -1,0 +1,128 @@
+<div class="container dashboard-container">
+  <div class="dashboard-header">
+    <h2>Admin Dashboard</h2>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="registerNewEmployee()">
+        <span class="btn-icon">+</span> Register New Employee
+      </button>
+      <button class="btn btn-outline" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3>Registered Employees</h3>
+    </div>
+
+    <div *ngIf="loading" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading employees...</p>
+    </div>
+
+    <div class="table-responsive" *ngIf="!loading && employees">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            <th>Full Name</th>
+            <th>Phone Number</th>
+            <th>Designation</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of employees; trackBy: trackByEmployeeId">
+            <td>{{ employee.employee_id }}</td>
+            <td>{{ employee.full_name }}</td>
+            <td>{{ employee.phone }}</td>
+            <td>{{ employee.designation }}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-view" (click)="viewEmployee(employee)" title="View Details">
+                View
+              </button>
+              <button class="btn btn-sm btn-edit" (click)="editEmployee(employee.id)" title="Edit Employee">
+                Edit
+              </button>
+              <button class="btn btn-sm btn-delete" (click)="softDeleteEmployee(employee.id)" title="Soft Delete">
+                Delete
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="employees.length === 0 && !loading">
+            <td colspan="5" class="text-center">No employees found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- View Employee Modal -->
+<div *ngIf="showViewModal" class="modal-overlay" (click)="closeViewModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Employee Details</h3>
+      <button class="modal-close" (click)="closeViewModal()">&times;</button>
+    </div>
+    <div class="modal-body" *ngIf="selectedEmployee">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Employee ID:</label>
+          <span>{{ selectedEmployee.employee_id }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Full Name:</label>
+          <span>{{ selectedEmployee.full_name }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Email:</label>
+          <span>{{ selectedEmployee.email }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Phone:</label>
+          <span>{{ selectedEmployee.phone }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Department:</label>
+          <span>{{ selectedEmployee.department }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Designation:</label>
+          <span>{{ selectedEmployee.designation }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Date of Joining:</label>
+          <span>{{ selectedEmployee.date_of_joining | date:'mediumDate' }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Salary:</label>
+          <span>{{ selectedEmployee.salary | currency:'USD':'symbol':'1.2-2' }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Gender:</label>
+          <span>{{ selectedEmployee.gender }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Employment Type:</label>
+          <span>{{ selectedEmployee.employment_type }}</span>
+        </div>
+        <div class="detail-item full-width">
+          <label>Address:</label>
+          <span>{{ selectedEmployee.address }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Status:</label>
+          <span [class]="selectedEmployee.is_active ? 'status-active' : 'status-inactive'">
+            {{ selectedEmployee.is_active ? 'Active' : 'Inactive' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="closeViewModal()">Close</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<div class="container">
+  <div class="card employee-card">
+    <h2 class="card-title">{{ isEditMode ? 'Edit Employee' : 'Employee Registration' }}</h2>
+    
+    <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <!-- Employee ID -->
+        <div class="form-group">
+          <label for="employee_id">Employee ID</label>
+          <input type="text" id="employee_id" formControlName="employee_id" placeholder="e.g. EMP001">
+          <span *ngIf="employeeForm.get('employee_id')?.invalid && employeeForm.get('employee_id')?.touched" class="error-message">
+            Employee ID is required.
+          </span>
+        </div>
+
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="full_name">Full Name</label>
+          <input type="text" id="full_name" formControlName="full_name" placeholder="John Doe">
+          <span *ngIf="employeeForm.get('full_name')?.invalid && employeeForm.get('full_name')?.touched" class="error-message">
+            Full Name is required.
+          </span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" placeholder="john@example.com">
+          <span *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched" class="error-message">
+            <span *ngIf="employeeForm.get('email')?.errors?.['required']">Email is required.</span>
+            <span *ngIf="employeeForm.get('email')?.errors?.['email']">Invalid email format.</span>
+          </span>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="text" id="phone" formControlName="phone" placeholder="+1234567890">
+          <span *ngIf="employeeForm.get('phone')?.invalid && employeeForm.get('phone')?.touched" class="error-message">
+            Phone is required.
+          </span>
+        </div>
+
+        <!-- Department -->
+        <div class="form-group">
+          <label for="department">Department</label>
+          <select id="department" formControlName="department">
+            <option value="">Select Department</option>
+            <option value="IT">IT</option>
+            <option value="HR">HR</option>
+            <option value="Finance">Finance</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Sales">Sales</option>
+            <option value="Operations">Operations</option>
+          </select>
+          <span *ngIf="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched" class="error-message">
+            Department is required.
+          </span>
+        </div>
+
+        <!-- Designation -->
+        <div class="form-group">
+          <label for="designation">Designation</label>
+          <input type="text" id="designation" formControlName="designation" placeholder="e.g. Software Engineer">
+          <span *ngIf="employeeForm.get('designation')?.invalid && employeeForm.get('designation')?.touched" class="error-message">
+            Designation is required.
+          </span>
+        </div>
+
+        <!-- Date of Joining -->
+        <div class="form-group">
+          <label for="date_of_joining">Date of Joining</label>
+          <input type="date" id="date_of_joining" formControlName="date_of_joining">
+          <span *ngIf="employeeForm.get('date_of_joining')?.invalid && employeeForm.get('date_of_joining')?.touched" class="error-message">
+            Date is required.
+          </span>
+        </div>
+
+        <!-- Salary -->
+        <div class="form-group">
+          <label for="salary">Salary</label>
+          <input type="number" id="salary" formControlName="salary" placeholder="0.00">
+          <span *ngIf="employeeForm.get('salary')?.invalid && employeeForm.get('salary')?.touched" class="error-message">
+            Valid salary is required.
+          </span>
+        </div>
+
+        <!-- Gender -->
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <select id="gender" formControlName="gender">
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <span *ngIf="employeeForm.get('gender')?.invalid && employeeForm.get('gender')?.touched" class="error-message">
+            Gender is required.
+          </span>
+        </div>
+
+        <!-- Employment Type -->
+        <div class="form-group">
+          <label for="employment_type">Employment Type</label>
+          <select id="employment_type" formControlName="employment_type">
+            <option value="">Select Type</option>
+            <option value="Full-Time">Full-Time</option>
+            <option value="Part-Time">Part-Time</option>
+            <option value="Contract">Contract</option>
+            <option value="Intern">Intern</option>
+          </select>
+          <span *ngIf="employeeForm.get('employment_type')?.invalid && employeeForm.get('employment_type')?.touched" class="error-message">
+            Employment Type is required.
+          </span>
+        </div>
+
+        <!-- Address (Full Width) -->
+        <div class="form-group full-width">
+          <label for="address">Address</label>
+          <textarea id="address" formControlName="address" rows="3" placeholder="Enter full address"></textarea>
+          <span *ngIf="employeeForm.get('address')?.invalid && employeeForm.get('address')?.touched" class="error-message">
+            Address is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="employeeForm.invalid || loading">
+          {{ loading ? 'Processing...' : (isEditMode ? 'Update Employee' : 'Register Employee') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

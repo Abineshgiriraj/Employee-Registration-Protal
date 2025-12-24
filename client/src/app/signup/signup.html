@@ -1,0 +1,61 @@
+<div class="auth-container">
+  <div class="card auth-card">
+    <h2 class="card-title">Sign Up</h2>
+    
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Choose a username"
+        />
+        <div *ngIf="f['username'].touched && f['username'].invalid" class="error-message">
+          <span *ngIf="f['username'].errors?.['required']">Username is required</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+        <div *ngIf="f['email'].touched && f['email'].invalid" class="error-message">
+          <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+          <span *ngIf="f['email'].errors?.['email']">Please enter a valid email</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Create a password (min 6 chars)"
+        />
+        <div *ngIf="f['password'].touched && f['password'].invalid" class="error-message">
+          <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message" style="margin-bottom: 1rem; text-align: center;">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loading">
+        <span *ngIf="loading">Creating Account...</span>
+        <span *ngIf="!loading">Sign Up</span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login">Login</a></p>
+    </div>
+  </div>
+</div>
