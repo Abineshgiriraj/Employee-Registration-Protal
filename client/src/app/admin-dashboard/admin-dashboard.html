@@ -58,6 +58,51 @@
       </table>
     </div>
   </div>
+
+  <!-- Inactive Employees Table -->
+  <div class="card inactive-card">
+    <div class="card-header">
+      <h3>Inactive Employees</h3>
+    </div>
+
+    <div *ngIf="loadingInactive" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Loading inactive employees...</p>
+    </div>
+
+    <div class="table-responsive" *ngIf="!loadingInactive && inactiveEmployees">
+      <table class="table table-inactive">
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            <th>Full Name</th>
+            <th>Phone Number</th>
+            <th>Designation</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let employee of inactiveEmployees; trackBy: trackByEmployeeId">
+            <td>{{ employee.employee_id }}</td>
+            <td>{{ employee.full_name }}</td>
+            <td>{{ employee.phone }}</td>
+            <td>{{ employee.designation }}</td>
+            <td class="actions">
+              <button class="btn btn-sm btn-view" (click)="viewEmployee(employee)" title="View Details">
+                View
+              </button>
+              <button class="btn btn-sm btn-restore" (click)="restoreEmployee(employee.id)" title="Restore Employee">
+                Restore
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="inactiveEmployees.length === 0 && !loadingInactive">
+            <td colspan="5" class="text-center">No inactive employees found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- View Employee Modal -->

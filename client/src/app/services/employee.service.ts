@@ -34,4 +34,12 @@ export class EmployeeService {
   softDeleteEmployee(id: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}${id}/disable/`, {});
   }
+
+  getInactiveEmployees(): Observable<any> {
+    return this.http.get(`${this.apiUrl}inactive/`);
+  }
+
+  restoreEmployee(id: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}${id}/restore/`, {});
+  }
 }

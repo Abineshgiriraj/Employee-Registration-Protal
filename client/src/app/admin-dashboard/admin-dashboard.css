@@ -339,6 +339,52 @@
   justify-content: flex-end;
 }
 
+/* Inactive Employees Styling */
+.inactive-card {
+  margin-top: 2rem;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+}
+
+.inactive-card .card-header {
+  background-color: #e9ecef;
+  border-bottom: 2px solid #dee2e6;
+  padding: 1rem 1.5rem;
+  margin: -2rem -2rem 1.5rem -2rem;
+}
+
+.inactive-card .card-header h3 {
+  color: #6c757d;
+  font-size: 1.25rem;
+}
+
+.table-inactive {
+  background-color: #ffffff;
+}
+
+.table-inactive tbody tr {
+  opacity: 0.85;
+  background-color: #f8f9fa;
+}
+
+.table-inactive tbody tr:hover {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+.table-inactive td {
+  color: #6c757d;
+}
+
+.btn-restore {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-restore:hover {
+  background-color: #138496;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .dashboard-container {
@@ -384,5 +430,9 @@
   .modal-content {
     width: 95%;
     margin: 1rem;
+  }
+
+  .inactive-card {
+    margin-top: 1.5rem;
   }
 }

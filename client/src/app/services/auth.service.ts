@@ -28,7 +28,7 @@ export class AuthService {
   }
 
   signup(userData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register/`, userData);
+    return this.http.post<any>(`${this.apiUrl}/auth/register/`, userData);
   }
 
   getRole(): string | null {

@@ -11,7 +11,9 @@ import { AuthService } from '../services/auth.service';
 })
 export class AdminDashboard implements OnInit {
   employees: any[] = [];
+  inactiveEmployees: any[] = [];
   loading: boolean = false;
+  loadingInactive: boolean = false;
   errorMessage: string = '';
   successMessage: string = '';
   selectedEmployee: any = null;
@@ -26,6 +28,7 @@ export class AdminDashboard implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
+    this.loadInactiveEmployees();
   }
 
   loadEmployees() {
@@ -83,19 +86,62 @@ export class AdminDashboard implements OnInit {
     this.router.navigate(['/admin-dashboard/register']);
   }
 
+  loadInactiveEmployees() {
+    this.loadingInactive = true;
+    this.employeeService.getInactiveEmployees().subscribe({
+      next: (data) => {
+        let employeesData = data;
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          employeesData = data.data || data.results || data.employees || [];
+        }
+        this.inactiveEmployees = Array.isArray(employeesData) ? employeesData : [];
+        this.loadingInactive = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('❌ Error loading inactive employees:', error);
+        this.loadingInactive = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   softDeleteEmployee(id: number) {
     if (confirm('Are you sure you want to soft delete this employee? The record will be hidden but not permanently deleted.')) {
       this.employeeService.softDeleteEmployee(id).subscribe({
         next: () => {
           this.successMessage = 'Employee soft deleted successfully.';
-          // Remove from list or reload
+          // Reload both active and inactive lists
           this.loadEmployees();
+          this.loadInactiveEmployees();
           setTimeout(() => {
             this.successMessage = '';
           }, 3000);
         },
         error: (error) => {
           this.errorMessage = 'Failed to delete employee: ' + (error.error?.detail || error.message);
+          setTimeout(() => {
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
+    }
+  }
+
+  restoreEmployee(id: number) {
+    if (confirm('Are you sure you want to restore this employee? The employee will be moved back to active employees.')) {
+      this.employeeService.restoreEmployee(id).subscribe({
+        next: () => {
+          this.successMessage = 'Employee restored successfully.';
+          // Reload both active and inactive lists
+          this.loadEmployees();
+          this.loadInactiveEmployees();
+          setTimeout(() => {
+            this.successMessage = '';
+          }, 3000);
+        },
+        error: (error) => {
+          this.errorMessage = 'Failed to restore employee: ' + (error.error?.detail || error.message);
           setTimeout(() => {
             this.errorMessage = '';
           }, 5000);

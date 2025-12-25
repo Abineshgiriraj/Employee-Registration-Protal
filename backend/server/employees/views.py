@@ -40,6 +40,21 @@ class EmployeeListView(APIView):
         serializer = EmployeeSerializer(employees, many=True)
         return Response(serializer.data)
 
+
+class InactiveEmployeeListView(APIView):
+    """Endpoint to fetch inactive (soft-deleted) employees - Admin only"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Only admins can see inactive employees
+        if not is_admin_user(request.user):
+            return Response({"detail": "Permission denied. Only admins can view inactive employees."}, 
+                          status=status.HTTP_403_FORBIDDEN)
+        
+        employees = Employee.objects.filter(is_active=False)
+        serializer = EmployeeSerializer(employees, many=True)
+        return Response(serializer.data)
+
 class EmployeeDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -122,3 +137,24 @@ class EmployeeDisableView(APIView):
             return Response({"detail": "Employee soft deleted successfully."}, status=status.HTTP_200_OK)
         except Employee.DoesNotExist:
             return Response({"detail": "Employee not found or access denied."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class EmployeeRestoreView(APIView):
+    """Endpoint to restore soft-deleted employee (set is_active=True)"""
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request, pk):
+        # Only admins can restore employees
+        if not is_admin_user(request.user):
+            return Response({"detail": "Permission denied. Only admins can restore employees."}, 
+                          status=status.HTTP_403_FORBIDDEN)
+        
+        try:
+            employee = Employee.objects.get(pk=pk, is_active=False)
+            employee.is_active = True
+            employee.save()
+            serializer = EmployeeSerializer(employee)
+            return Response({"detail": "Employee restored successfully.", "employee": serializer.data}, 
+                          status=status.HTTP_200_OK)
+        except Employee.DoesNotExist:
+            return Response({"detail": "Inactive employee not found."}, status=status.HTTP_404_NOT_FOUND)

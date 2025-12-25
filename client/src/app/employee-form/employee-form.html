@@ -1,7 +1,10 @@
 <div class="container">
+  <div class="form-header">
+    <h2>{{ isEditMode ? 'Edit Employee' : 'Employee Registration' }}</h2>
+    <button class="btn btn-outline" (click)="logout()">Logout</button>
+  </div>
+
   <div class="card employee-card">
-    <h2 class="card-title">{{ isEditMode ? 'Edit Employee' : 'Employee Registration' }}</h2>
-    
     <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
     <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
 
